@@ -1,5 +1,26 @@
-const { select } = require('@inquirer/prompts')     //Esse 'select' é basicamente um objeto dessa biblioteca
-const { clear } = require('console')
+const { select, input } = require('@inquirer/prompts')     //Esse 'select' é basicamente um objeto dessa biblioteca
+
+let metas = []
+
+const cadastrarMeta = async () => {
+    const meta = await input({message: "Digite a meta:"})
+// Verifica se a entrada está vazia
+    if(meta.length == 0) {
+        console.log("A meta não pode ser vazia!")
+        return
+    }
+// Esse push aqui serve pra enfiar as coisas dentro da array metas (lá ele)
+// É aqui que decidimos quais as chaves e valores, dai é só atribuir na chave certa o valor de entrada, 'meta'
+    metas.push(
+        {
+            value: meta,
+            checked: false,
+            ehBemGay: true,
+            vddSejaDita: "Lá ele!",
+            param: meta
+        }
+    )
+}
 
 const start = async () => {     // O async é necessario pro'await' lá e baixo
     while(true){
@@ -27,21 +48,26 @@ const start = async () => {     // O async é necessario pro'await' lá e baixo
             ]
         })
 
-                switch(opcao) {
-                    case 'cadastrar':
-                        clear
-                        console.log("Vamos cadastrar!")
-                        break
-                    case 'listar':
-                        console.log("Vamos listar!")
-                        break
-                    case 'deletar':
-                        console.log("Vamos deletar!")
-                        break
-                    case 'sair':
-                        console.log("Até a próxima!")
-                        return
-                }
+        switch(opcao) {
+
+            case 'cadastrar':
+                await cadastrarMeta()
+                console.log(metas)
+                break
+                
+            case 'listar':
+                await listarMeta()
+                break
+
+            case 'deletar':
+                await deletarMeta()
+                break
+
+            case 'sair':
+                console.log("Até a próxima!")
+                return
             }
+        }
 }
+
 start()
