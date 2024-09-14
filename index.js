@@ -1,4 +1,4 @@
-const { select, input } = require('@inquirer/prompts')     //Esse 'select' é basicamente um objeto dessa biblioteca
+const { select, input, checkbox } = require('@inquirer/prompts')     //Esse 'select' é basicamente um objeto dessa biblioteca
 
 let metas = []
 
@@ -14,12 +14,35 @@ const cadastrarMeta = async () => {
     metas.push(
         {
             value: meta,
-            checked: false,
-            ehBemGay: true,
-            vddSejaDita: "Lá ele!",
-            param: meta
+            checked: false
         }
     )
+}
+
+const listarMeta = async () => {
+    const respostas = await checkbox({
+        message: "Setas para navegar entre metas, barra de espaço para marcar e desmarcar as metas e enter para finalizar!",
+        choices: [...metas],
+        instructions: false
+    })
+
+    if(respostas.length == 0) {
+        console.timeLog("Nenhuma meta foi selecionada!")
+        return
+    }
+
+    metas.forEach((m) => {
+        m.checked = false
+    })
+
+    respostas.forEach((resposta) => {
+        const meta = metas.find((m) => {
+            return m.value == resposta
+        })
+
+        meta.checked = true
+    })
+
 }
 
 const start = async () => {     // O async é necessario pro'await' lá e baixo
