@@ -45,6 +45,21 @@ const listarMeta = async () => {
 
 }
 
+const metasRealizadas = async () => {
+    const realizadas = metas.filter((meta) => { // Esse metodo 'filter, forEach', sao metodos HOF(Higher order functions). Isso significa que sao metodos que recebem funcoes como parametro
+        return meta.checked
+})
+    if(realizadas.length == 0) {
+        console.log("Nenhuma meta foi realizada ainda!")
+        return
+    }
+
+    await select({
+        message: "Metas realizadas:",
+        choices: [...realizadas]
+    })
+}
+
 const start = async () => {     // O async é necessario pro'await' lá e baixo
     while(true){
         // Essa const 'opcao' passa a receber o valor que o usuario decidir. Nesse caso, pode ser: cadastrar, listar, etc
@@ -59,6 +74,10 @@ const start = async () => {     // O async é necessario pro'await' lá e baixo
                 {
                     name: "Listar metas",
                     value: "listar"
+                },
+                {
+                    name: "Metas Realizadas",
+                    value: "realizadas"
                 },
                 {
                     name: "Deletar meta",
@@ -80,6 +99,10 @@ const start = async () => {     // O async é necessario pro'await' lá e baixo
                 
             case 'listar':
                 await listarMeta()
+                break
+
+            case 'realizadas':
+                await metasRealizadas()
                 break
 
             case 'deletar':
