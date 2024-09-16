@@ -39,6 +39,11 @@ const cadastrarMeta = async () => {
 }
 
 const listarMeta = async () => {
+    if(metas.length == 0) {
+        mensagem = "Não existem metas registradas!"
+        return
+    }
+
     const respostas = await checkbox({
         message: "Setas para navegar entre metas, barra de espaço para marcar e desmarcar as metas e enter para finalizar!",
         choices: [...metas],
@@ -68,6 +73,11 @@ const listarMeta = async () => {
 }
 
 const metasRealizadas = async () => {
+    if(metas.length == 0) {
+        mensagem = "Não existem metas registradas!"
+        return
+    }
+
     const realizadas = metas.filter((meta) => { // Esse metodo 'filter, forEach', sao metodos HOF(Higher order functions). Isso significa que sao metodos que recebem funcoes como parametro
         return meta.checked
 })
@@ -83,6 +93,11 @@ const metasRealizadas = async () => {
 }
 
 const metasAbertas = async () => {
+    if(metas.length == 0) {
+        mensagem = "Não existem metas registradas!"
+        return
+    }
+
     const abertas = metas.filter((meta) => {
         return !meta.checked
     })
@@ -99,7 +114,11 @@ const metasAbertas = async () => {
 }
 
 const deletarMetas = async () => {
-    
+    if(metas.length == 0) {
+        mensagem = "Não existem metas registradas!"
+        return
+    }
+
     const metasDesmarcadas = metas.map((meta) => {
         return {value: meta.value, checked: false}
     })
