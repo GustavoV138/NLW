@@ -1,8 +1,23 @@
 const { select, input, checkbox } = require('@inquirer/prompts')     //Esse 'select' é basicamente um objeto dessa biblioteca
+const fs = require("fs").promises
 
 let mensagem = "Bem vindo ao app de metas!";
 
-let metas = []
+let metas
+
+const carregarMetas = async () => {
+    try {
+        const dados = await fs.readFile("metas.json", "utf-8")
+        metas = JSON.parse(dados)
+    }
+    catch(erro) {
+        metas = []
+    }
+}
+
+const salvarMetas = async () => {
+    await fs.writeFile("metas.json", JSON.stringify(metas, null, 2))
+}
 
 const cadastrarMeta = async () => {
     const meta = await input({message: "Digite a meta:"})
@@ -120,9 +135,13 @@ const mostrarMensagem = () => {
 }
 
 const start = async () => {     // O async é necessario pro'await' lá e baixo
+    
+    await carregarMetas()
+
     while(true){
 
         mostrarMensagem()
+        await salvarMetas()
         // Essa const 'opcao' passa a receber o valor que o usuario decidir. Nesse caso, pode ser: cadastrar, listar, etc
         // Esse objeto 'select' permite que voce "navegue" entre as opcoes
         const opcao = await select({        //Esse 'await' serve pra fazer o menu ficar parado, esperando por uma açao
