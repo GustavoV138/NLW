@@ -77,6 +77,32 @@ const metasAbertas = async () => {
     })
 }
 
+const deletarMetas = async () => {
+    
+    const metasDesmarcadas = metas.map((meta) => {
+        return {value: meta.value, checked: false}
+    })
+
+    const itensADeletar = await checkbox({
+        message: "Setas para navegar entre metas, barra de espaço para marcar e desmarcar as metas e enter para finalizar!",
+        choices: [...metasDesmarcadas],
+        instructions: false
+    })
+
+    if(itensADeletar.length == 0) {
+        console.log("Nenhuma meta foi deletada!")
+        return
+    }
+
+    itensADeletar.forEach((item) => {
+        metas = metas.filter((meta) => {
+            return meta.value != item
+        })
+    })
+
+    console.log("Meta(s) deletada(s) com sucesso!")
+}
+
 const start = async () => {     // O async é necessario pro'await' lá e baixo
     while(true){
         // Essa const 'opcao' passa a receber o valor que o usuario decidir. Nesse caso, pode ser: cadastrar, listar, etc
@@ -101,7 +127,7 @@ const start = async () => {     // O async é necessario pro'await' lá e baixo
                     value: "abertas"
                 },
                 {
-                    name: "Deletar meta",
+                    name: "Deletar metas",
                     value: "deletar"
                 },
                 {
@@ -115,7 +141,6 @@ const start = async () => {     // O async é necessario pro'await' lá e baixo
 
             case 'cadastrar':
                 await cadastrarMeta()
-                console.log(metas)
                 break
                 
             case 'listar':
@@ -131,7 +156,7 @@ const start = async () => {     // O async é necessario pro'await' lá e baixo
                 break
 
             case 'deletar':
-                await deletarMeta()
+                await deletarMetas()
                 break
 
             case 'sair':
