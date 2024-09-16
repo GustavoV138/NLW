@@ -29,7 +29,7 @@ const listarMeta = async () => {
     metas.forEach((m) => {
         m.checked = false
     })
-    
+
     if(respostas.length == 0) {
         console.log("Nenhuma meta foi selecionada!")
         return
@@ -61,6 +61,22 @@ const metasRealizadas = async () => {
     })
 }
 
+const metasAbertas = async () => {
+    const abertas = metas.filter((meta) => {
+        return !meta.checked
+    })
+
+    if(abertas.length == 0) {
+        console.log("Todas as metas já foram cumpridas. Continue assim!")
+        return
+    }
+
+    await select({
+        message: "Metas a serem cumpridas: " + abertas.length,
+        choices: [...abertas]
+    })
+}
+
 const start = async () => {     // O async é necessario pro'await' lá e baixo
     while(true){
         // Essa const 'opcao' passa a receber o valor que o usuario decidir. Nesse caso, pode ser: cadastrar, listar, etc
@@ -79,6 +95,10 @@ const start = async () => {     // O async é necessario pro'await' lá e baixo
                 {
                     name: "Metas Realizadas",
                     value: "realizadas"
+                },
+                {
+                    name: "Metas Abertas",
+                    value: "abertas"
                 },
                 {
                     name: "Deletar meta",
@@ -104,6 +124,10 @@ const start = async () => {     // O async é necessario pro'await' lá e baixo
 
             case 'realizadas':
                 await metasRealizadas()
+                break
+
+            case 'abertas':
+                await metasAbertas()
                 break
 
             case 'deletar':
